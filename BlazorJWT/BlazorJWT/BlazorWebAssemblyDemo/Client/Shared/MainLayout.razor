@@ -1,0 +1,40 @@
+﻿@inherits LayoutComponentBase
+@inject AuthService _authService;
+@inject NavigationManager NavigationManager
+<div class="page">
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+
+            <main>
+                <div class="top-row px-4">
+                    <a @onclick="LoginOutExec">LoginOut</a>
+                </div>
+                
+                
+                
+
+                <article class="content px-4">
+                    @Body
+                </article>
+            </main>
+        </Authorized>
+        <NotAuthorized>
+            <div style="margin: 100px 0; width:100%; text-align: center; color: red;">
+                <span style="font-size:20px">Login timeout detected, please <a href="/login" style="text-decoration:underline">Login</a> again！</span>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>
+</div>
+
+@code{
+    async void LoginOutExec()
+    {
+        await _authService.Logout();
+        NavigationManager.NavigateTo("/login");
+    }
+}
+
+

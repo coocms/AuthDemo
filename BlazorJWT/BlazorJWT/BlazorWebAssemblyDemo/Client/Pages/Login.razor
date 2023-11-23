@@ -1,0 +1,39 @@
+﻿@page "/login"
+@inject AuthService _authService;
+@layout LoginLayout
+@inject NavigationManager NavigationManager
+<PageTitle>Login</PageTitle>
+
+<input id="Name" class="form-control" type="text" placeholder="Enter a Name" @bind="Name" />
+
+<input id="Password" class="form-control" type="text" placeholder="Enter a Password" @bind="Password" />
+
+<button class="btn btn-primary" @onclick="LoginExec">Login</button>
+
+<button class="btn btn-primary" @onclick="LoginOutExec">LoginOut</button>
+
+
+@code{
+    string Name;
+    string Password;
+    string SelfInfo;
+
+    async void LoginExec()
+    {
+        var loginRes = await _authService.Login(new BlazorWebAssemblyDemo.Shared.Models.LoginRqtDto { Account = Name, Password = Password });
+        if (loginRes)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    async void LoginOutExec()
+    {
+        await _authService.Logout();
+    }
+    async void GetSelfInfo()
+    {
+        SelfInfo = await _authService.GetSelfInfo();
+        StateHasChanged();
+    }
+}
